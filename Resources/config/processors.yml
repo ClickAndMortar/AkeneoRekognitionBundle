@@ -1,0 +1,12 @@
+parameters:
+  clickandmortar.connector.processor.mass_edit.product.add_rekognition_data.class: ClickAndMortar\AkeneoRekognitionBundle\Connector\Processor\MassEdit\Product\AddRekognitionDataProcessor
+
+services:
+  clickandmortar.connector.processor.mass_edit.product.add_rekognition_data:
+    class: '%clickandmortar.connector.processor.mass_edit.product.add_rekognition_data.class%'
+    arguments:
+      - '%catalog_storage_dir%'
+      - '@pim_catalog.updater.property_setter'
+      - '%aws_access_key_id%' # TODO Find a way to not pass this has a parameter
+      - '%aws_secret_access_key%' # TODO Find a way to not pass this has a parameter
+      - '%aws_rekognition_minimum_confidence%'

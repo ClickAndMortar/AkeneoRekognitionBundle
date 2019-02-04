@@ -1,0 +1,13 @@
+extensions:
+  clickandmortar-mass-product-edit-configure-add-rekognition-data:
+    module: clickandmortar/add-rekognition-data
+    parent: pim-mass-product-edit
+    position: 500
+    config:
+      title: pim_enrich.mass_edit.product.title
+      label: 'Add Rekognition data'
+      labelCount: "{1}Add Rekognition data to <span class=\"AknFullPage-title--highlight\">1 product</span>|]1, Inf[Add Rekognition data to <span class=\"AknFullPage-title--highlight\">{{ itemsCount }} products</span>"
+      description: 'Add a Rekognition data for a set of products'
+      code: add_rekognition_data
+      jobInstanceCode: add_rekognition_data
+      icon: icon-template

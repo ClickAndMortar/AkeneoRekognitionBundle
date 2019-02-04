@@ -1,0 +1,4 @@
+config:
+  paths:
+    clickandmortar/add-rekognition-data: clickandmortarakeneorekognition/js/add-rekognition-data
+    clickandmortar/template/add-rekognition-data: clickandmortarakeneorekognition/templates/add-rekognition-data.html
