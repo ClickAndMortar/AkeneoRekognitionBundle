@@ -1,0 +1,16 @@
+{
+    "name": "clickandmortar/akeneo-rekognition-bundle",
+    "description": "ClickAndMortar AkeneoRekognitionBundle",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "require": {
+        "php": "^7.1",
+        "akeneo/pim-community-dev": "2.3.*",
+        "clickandmortar/rekognition-php": "^0.2"
+    },
+    "autoload": {
+      "psr-4": {
+        "ClickAndMortar\\AkeneoRekognitionBundle\\": ""
+      }
+    }
+}
