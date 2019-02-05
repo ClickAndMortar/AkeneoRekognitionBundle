@@ -85,7 +85,7 @@ Before using `Akeneo Rekognition Bundle `,
 Import new attributes to store data from `Rekognition`:
 
 ```
-php bin/console akeneo:batch:job -c "{\"filePath\":\"src/ClickAndMortar/AkeneoRekognitionBundle/Resources/fixtures/attributes.csv\"}" csv_attributes_import
+php bin/console akeneo:batch:job -c "{\"filePath\":\"vendor/clickandmortar/akeneo-rekognition-bundle/Resources/fixtures/attributes.csv\"}" csv_attributes_import
 ```
 
 ## Add new attributes to family
