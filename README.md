@@ -1,5 +1,7 @@
 # Akeneo Rekognition Bundle - Click And Mortar
 
+![Akeneo Rekognition Bundle Logo](akeneo-rekognition-bundle-logo.png)
+
 `Akeneo Rekognition Bundle` allows to retrieve objects and texts
 detected with [AWS Rekognition](https://aws.amazon.com/rekognition/) 
 (using [rekognition-php](https://github.com/ClickAndMortar/rekognition-php)) from a product model image and to store them into this product model.
@@ -18,6 +20,17 @@ will return the following data:
 "rekognition_texts_words": {"<all_channels>": {"en_US": "SHOULD\nHAVE\nBEEN\nA\nCOWBOY"}}
 ...
 ```
+
+# Requirements
+
+`Akeneo Rekognition Bundle` requires:
+
+|                                     | Version |
+| ----------------------------------- | ------- |
+| PHP                                 | `>=7.1` |
+| [Akeneo](https://www.akeneo.com/)   | `>=2.3` |
+
+It also requires an AWS account as it uses [AWS Rekognition](https://aws.amazon.com/rekognition/).
 
 # Installation
 
@@ -109,8 +122,8 @@ From product models list:
 - Click "Next", "Next", then "Confirm".
 - Check on dashboard that operation has status `Completed`.
 
-Open product models that was previously checked.
-It now has attributes filled with Rekognition data.
+Open product models that were previously checked.
+They now have attributes filled with Rekognition data.
 
 # To Do
 
