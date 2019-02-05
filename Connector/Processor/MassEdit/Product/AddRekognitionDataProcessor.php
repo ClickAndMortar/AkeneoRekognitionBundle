@@ -48,8 +48,7 @@ class AddRekognitionDataProcessor extends AbstractProcessor
         string $awsAccessKeyId,
         string $awsSecretAccessKey,
         int $minimumConfidence
-    )
-    {
+    ) {
         $this->catalogStorageDir = $catalogStorageDir;
         $this->propertySetter = $propertySetter;
         $this->awsAccessKeyId = $awsAccessKeyId;
@@ -102,7 +101,8 @@ class AddRekognitionDataProcessor extends AbstractProcessor
             $productModel,
             'rekognition_labels',
             implode("\n", $this->getLabelsToStore($labels)),
-            ['locale' => 'fr_FR', 'scope' => null]); // TODO locale should not be hard coded
+            ['locale' => 'fr_FR', 'scope' => null] // TODO locale should not be hard coded
+        );
 
         $texts = $rekognitionImage->getTexts($this->minimumConfidence);
 
@@ -110,13 +110,15 @@ class AddRekognitionDataProcessor extends AbstractProcessor
             $productModel,
             'rekognition_texts_words',
             implode("\n", $this->getTextsToStore($texts, Text::TYPE_WORD)),
-            ['locale' => 'fr_FR', 'scope' => null]); // TODO locale should not be hard coded
+            ['locale' => 'fr_FR', 'scope' => null] // TODO locale should not be hard coded
+        );
 
         $this->propertySetter->setData(
             $productModel,
             'rekognition_texts_lines',
             implode("\n", $this->getTextsToStore($texts, Text::TYPE_LINE)),
-            ['locale' => 'fr_FR', 'scope' => null]);
+            ['locale' => 'fr_FR', 'scope' => null] // TODO locale should not be hard coded
+        );
 
         return $productModel;
     }
