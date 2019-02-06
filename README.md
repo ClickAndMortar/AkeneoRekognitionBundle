@@ -8,50 +8,28 @@ detected with [AWS Rekognition](https://aws.amazon.com/rekognition/)
 
 ![Akeneo Rekognition Bundle in 3 steps](img/akeneo-rekognition-bundle-in-3-steps.png)
 
-## Example of retrieved data
-
-Using the following sql:
-```sql
-select raw_values from pim_catalog_product_model where id=PRODUCT_MODEL_ID
-```
-will return the following data:
-```
-...
-"rekognition_labels": {"<all_channels>": {"en_US": "Apparel\nClothing\nT-Shirt"}},
-"rekognition_texts_lines": {"<all_channels>": {"en_US": "I SHOULD\nHAVE BEEN\nA COWBOY"}},
-"rekognition_texts_words": {"<all_channels>": {"en_US": "SHOULD\nHAVE\nBEEN\nA\nCOWBOY"}}
-...
-```
-
 # Requirements
-
-`Akeneo Rekognition Bundle` requires:
 
 |                                     | Version |
 | ----------------------------------- | ------- |
 | PHP                                 | `>=7.1` |
 | [Akeneo](https://www.akeneo.com/)   | `>=2.3` |
 
-It also requires an AWS account as it uses [AWS Rekognition](https://aws.amazon.com/rekognition/).
+An AWS account is also required as
+[AWS Rekognition](https://aws.amazon.com/rekognition/)
+will be used.
 
 # Installation
 
-## Step 1: Download the Bundle
-
-Open a command console, enter your project directory and execute the
-following command to download the latest stable version of this bundle:
+## Download the Bundle
 
 ```console
 $ composer require clickandmortar/akeneo-rekognition-bundle
 ```
 
-This command requires you to have Composer installed globally, as explained
-in the [installation chapter](https://getcomposer.org/doc/00-intro.md)
-of the Composer documentation.
+## Enable the Bundle
 
-## Step 2: Enable the Bundle
-
-Then, enable the bundle by adding it to the list of registered bundles
+Enable the bundle by adding it to the list of registered bundles
 in the `app/AppKernel.php` file of your project:
 
 ```php
