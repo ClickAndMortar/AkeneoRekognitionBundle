@@ -6,6 +6,8 @@
 detected with [AWS Rekognition](https://aws.amazon.com/rekognition/) 
 (using [rekognition-php](https://github.com/ClickAndMortar/rekognition-php)) from a product model image and to store them into this product model.
 
+![Akeneo Rekognition Bundle in 3 steps](img/akeneo-rekognition-bundle-in-3-steps.png)
+
 ## Example of retrieved data
 
 Using the following sql:
