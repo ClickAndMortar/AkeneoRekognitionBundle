@@ -127,9 +127,13 @@ From product models list:
 Open product models that were previously checked.
 They now have attributes filled with Rekognition data.
 
-# To Do
+# Roadmap
 
-- Add fields to store more information provided by Rekognition
-- Add `composer post install` to avoid to play some configuration commands
+- [ ] Handle locale (currently only storing in `fr_FR` locale)
+- [ ] Add fields to store more information provided by Rekognition
+- [ ] Add `composer post install` to avoid to play some configuration commands
 manually
-- Find a way to use environment variables with php-fpm (credentials AWS) 
+- [ ] Find a way to use environment variables with php-fpm
+(credentials AWS) for docker
+- [ ] Automate detection of entity level holding pictures
+(product model with parent only for the moment)
