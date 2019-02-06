@@ -163,12 +163,12 @@ class AddRekognitionDataProcessor extends AbstractProcessor
     {
         $textsToStore = array_filter(
             $texts,
-            function (Text $text) use ($type) {
+            function (Text $text) use ($type): bool {
                 return $text->getType() === $type;
             }
         );
 
-        return array_map(function (Text $text) {
+        return array_map(function (Text $text): string {
             return $text->getDetectedText();
         }, $textsToStore);
     }
