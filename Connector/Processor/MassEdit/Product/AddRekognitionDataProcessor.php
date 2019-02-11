@@ -110,14 +110,14 @@ class AddRekognitionDataProcessor extends AbstractProcessor
             $productModel,
             'rekognition_texts_words',
             implode("\n", $this->getTextsToStore($texts, Text::TYPE_WORD)),
-            ['locale' => 'fr_FR', 'scope' => null] // TODO locale should not be hard coded
+            ['locale' => null, 'scope' => null]
         );
 
         $this->propertySetter->setData(
             $productModel,
             'rekognition_texts_lines',
             implode("\n", $this->getTextsToStore($texts, Text::TYPE_LINE)),
-            ['locale' => 'fr_FR', 'scope' => null] // TODO locale should not be hard coded
+            ['locale' => null, 'scope' => null]
         );
 
         return $productModel;
