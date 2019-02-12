@@ -110,7 +110,7 @@ They now have attributes filled with Rekognition data.
 
 ## Roadmap
 
-- [ ] Handle locale (currently only storing in `fr_FR` locale)
+- [ ] Handle locale as currently labels are in english
 - [ ] Add fields to store more information provided by Rekognition
 - [ ] Add `composer post install` to avoid to play some configuration commands
 manually
