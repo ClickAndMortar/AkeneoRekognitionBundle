@@ -101,7 +101,7 @@ class AddRekognitionDataProcessor extends AbstractProcessor
             $productModel,
             'rekognition_labels',
             implode("\n", $this->getLabelsToStore($labels)),
-            ['locale' => 'fr_FR', 'scope' => null] // TODO locale should not be hard coded
+            ['locale' => null, 'scope' => null]
         );
 
         $texts = $rekognitionImage->getTexts($this->minimumConfidence);
