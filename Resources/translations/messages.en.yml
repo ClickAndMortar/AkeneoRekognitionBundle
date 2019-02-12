@@ -1,0 +1,5 @@
+# Job labels
+batch_jobs:
+  add_rekognition_data:
+    perform:
+      label: Add Rekognition data
