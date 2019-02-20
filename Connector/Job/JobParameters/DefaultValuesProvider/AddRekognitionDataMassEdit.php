@@ -18,20 +18,19 @@ class AddRekognitionDataMassEdit extends ProductMassEdit
     public function getDefaultValues()
     {
         $defaultValues = parent::getDefaultValues();
-        $defaultValues['filters'] = $this->getFilters($defaultValues);
+        $defaultValues['filters'] = $this->getFilters();
 
         return $defaultValues;
     }
 
     /**
-     * @param array $defaultValues
      * @return array
      */
-    protected function getFilters(array $defaultValues): array
+    protected function getFilters(): array
     {
         // A product model with a parent is a "1st variant Color"
         // See https://help.akeneo.com/articles/what-about-products-variants.html
-        $defaultValues['filters'] = [
+        return [
             [
                 'field' => 'parent',
                 'operator' => Operators::IS_NOT_EMPTY,
@@ -43,6 +42,5 @@ class AddRekognitionDataMassEdit extends ProductMassEdit
                 'value' => true,
             ],
         ];
-        return $defaultValues;
     }
 }
