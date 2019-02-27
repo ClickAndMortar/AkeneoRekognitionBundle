@@ -1,0 +1,10 @@
+parameters:
+    clickandmortar.writer.database.product_and_product_model.class: ClickAndMortar\AkeneoRekognitionBundle\Connector\Writer\Database\ProductAndProductModelWriter
+
+services:
+    clickandmortar.writer.database.product_and_product_model:
+        class: '%clickandmortar.writer.database.product_and_product_model.class%'
+        arguments:
+        - '@pim_versioning.manager.version'
+        - '@pim_catalog.saver.product_model'
+        - '@pim_catalog.saver.product'

@@ -1,5 +1,4 @@
 parameters:
-  clickandmortar.connector.job.job_parameters.default_values_provider.add_rekognition_data_mass_edit.class: ClickAndMortar\AkeneoRekognitionBundle\Connector\Job\JobParameters\DefaultValuesProvider\AddRekognitionDataMassEdit
   clickandmortar.connector.job_name.add_rekognition_data: 'add_rekognition_data'
 
 services:
@@ -17,7 +16,7 @@ services:
         type: '%pim_enrich.job.mass_edit_type%'
 
   clickandmortar.job.default_values_provider.add_rekognition_data:
-    class: '%clickandmortar.connector.job.job_parameters.default_values_provider.add_rekognition_data_mass_edit.class%'
+    class: '%pim_enrich.connector.job.job_parameters.default_values_provider.product_mass_edit.class%'
     arguments:
       - [ '%clickandmortar.connector.job_name.add_rekognition_data%' ]
     tags:
