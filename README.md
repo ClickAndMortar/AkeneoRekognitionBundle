@@ -68,14 +68,14 @@ Before using `Akeneo Rekognition Bundle`,
 Import new attributes to store data from `Rekognition`:
 
 ```
-php bin/console akeneo:batch:job -c "{\"filePath\":\"vendor/clickandmortar/akeneo-rekognition-bundle/Resources/fixtures/attributes.csv\"}" csv_attributes_import
+php bin/console akeneo:batch:job -c "{\"filePath\":\"vendor/clickandmortar/akeneo-rekognition-bundle/Resources/fixtures/attributes.csv\"}" <your_attribute_import_job_code>
 ```
 
 ### Add new attributes to family
 
 [Add new attributes to family](https://help.akeneo.com/articles/manage-your-families.html#manage-attributes-in-a-family)
 
-### Edit a family variant
+### Edit a family variant (if necessary)
 
 [Edit a family variant](https://help.akeneo.com/articles/manage-your-families.html#edit-a-family-variant)
 
@@ -88,9 +88,7 @@ php bin/console akeneo:batch:create-job internal add_rekognition_data mass_edit 
 
 ### Run job
 
-The following line will process all "1st variant Color" (See
-[What about products variants](https://help.akeneo.com/articles/what-about-products-variants.html))
-with image and add data from Rekognition to the variant.
+The following line will process all products and models and add data from Rekognition if attributes are editable from family.
 
 ```
 php bin/console akeneo:batch:job add_rekognition_data
@@ -98,15 +96,15 @@ php bin/console akeneo:batch:job add_rekognition_data
 
 ### Mass edit
 
-From product models list:
+From products / models list:
 - Check the ones that need to be processed.
 - Click "Mass edit".
 - Click "Add Rekognition Data".
 - Click "Next", "Next", then "Confirm".
 - Check on dashboard that operation has status `Completed`.
 
-Open product models that were previously checked.
-They now have attributes filled with Rekognition data.
+Open products / models that were previously checked.
+They now have attributes filled with Rekognition data (only if attributes are editable)
 
 ## Roadmap
 
@@ -116,5 +114,3 @@ They now have attributes filled with Rekognition data.
 manually
 - [ ] Find a way to use environment variables with php-fpm
 (credentials AWS) for docker
-- [ ] Automate detection of entity level holding pictures
-(product model with parent only for the moment)
