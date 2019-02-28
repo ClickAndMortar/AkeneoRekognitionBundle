@@ -20,15 +20,24 @@ use Pim\Component\Catalog\Updater\PropertySetter;
  */
 class AddRekognitionDataProcessor extends AbstractProcessor
 {
+    /** @var string */
+    const ATTRIBUTE_CODE_LABELS = 'rekognition_labels';
+
+    /** @var string */
+    const ATTRIBUTE_CODE_TEXTS_WORDS = 'rekognition_texts_words';
+
+    /** @var string */
+    const ATTRIBUTE_CODE_TEXTS_LINES = 'rekognition_texts_lines';
+
     /**
      * Rekognition attributes codes
      *
      * @var array
      */
     protected $rekognitionAttributesCodes = [
-        'rekognition_labels',
-        'rekognition_texts_words',
-        'rekognition_texts_lines',
+        self::ATTRIBUTE_CODE_LABELS,
+        self::ATTRIBUTE_CODE_TEXTS_WORDS,
+        self::ATTRIBUTE_CODE_TEXTS_LINES,
     ];
 
     /**
@@ -124,7 +133,7 @@ class AddRekognitionDataProcessor extends AbstractProcessor
         // And set data in attributes
         $this->propertySetter->setData(
             $product,
-            'rekognition_labels',
+            self::ATTRIBUTE_CODE_LABELS,
             implode("\n", $this->getLabelsToStore($labels)),
             ['locale' => null, 'scope' => null]
         );
@@ -132,14 +141,14 @@ class AddRekognitionDataProcessor extends AbstractProcessor
         $texts = $rekognitionImage->getTexts($this->minimumConfidence);
         $this->propertySetter->setData(
             $product,
-            'rekognition_texts_words',
+            self::ATTRIBUTE_CODE_TEXTS_WORDS,
             implode("\n", $this->getTextsToStore($texts, Text::TYPE_WORD)),
             ['locale' => null, 'scope' => null]
         );
 
         $this->propertySetter->setData(
             $product,
-            'rekognition_texts_lines',
+            self::ATTRIBUTE_CODE_TEXTS_LINES,
             implode("\n", $this->getTextsToStore($texts, Text::TYPE_LINE)),
             ['locale' => null, 'scope' => null]
         );
