@@ -7,4 +7,4 @@ services:
       - '@akeneo_batch.job_repository'
       - '@pim_enrich.reader.database.product_and_product_model'
       - '@clickandmortar.connector.processor.mass_edit.product.add_rekognition_data'
-      - '@clickandmortar.writer.database.product_and_product_model'
+      - '@pim_enrich.writer.database.product_and_product_model_writer'

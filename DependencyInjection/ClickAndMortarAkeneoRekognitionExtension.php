@@ -29,6 +29,5 @@ class ClickAndMortarAkeneoRekognitionExtension extends Extension
         $loader->load('jobs.yml');
         $loader->load('processors.yml');
         $loader->load('steps.yml');
-        $loader->load('writers.yml');
     }
 }
