@@ -5,6 +5,6 @@ services:
       - 'perform'
       - '@event_dispatcher'
       - '@akeneo_batch.job_repository'
-      - '@pim_enrich.reader.database.product_model'
+      - '@pim_enrich.reader.database.product_and_product_model'
       - '@clickandmortar.connector.processor.mass_edit.product.add_rekognition_data'
-      - '@pim_connector.writer.database.product_model'
+      - '@pim_enrich.writer.database.product_and_product_model_writer'

@@ -7,9 +7,12 @@ namespace ClickAndMortar\AkeneoRekognitionBundle\Connector\Processor\MassEdit\Pr
 use ClickAndMortar\Rekognition\Label;
 use ClickAndMortar\Rekognition\Service\DetectService;
 use ClickAndMortar\Rekognition\Text;
+use Pim\Bundle\CatalogBundle\Doctrine\ORM\Repository\AttributeRepository;
 use Pim\Bundle\EnrichBundle\Connector\Processor\AbstractProcessor;
+use Pim\Component\Catalog\Model\EntityWithFamilyInterface;
+use Pim\Component\Catalog\Model\AttributeInterface;
+use Pim\Component\Catalog\Model\Product;
 use Pim\Component\Catalog\Model\ProductModel;
-use Pim\Component\Catalog\Model\ProductModelInterface;
 use Pim\Component\Catalog\Updater\PropertySetter;
 
 /**
@@ -18,130 +21,165 @@ use Pim\Component\Catalog\Updater\PropertySetter;
 class AddRekognitionDataProcessor extends AbstractProcessor
 {
     /** @var string */
-    private $catalogStorageDir;
-
-    /** @var PropertySetter */
-    private $propertySetter;
+    const ATTRIBUTE_CODE_LABELS = 'rekognition_labels';
 
     /** @var string */
-    private $awsAccessKeyId;
+    const ATTRIBUTE_CODE_TEXTS_WORDS = 'rekognition_texts_words';
 
     /** @var string */
-    private $awsSecretAccessKey;
-
-    /** @var int */
-    private $minimumConfidence;
-
-    /** @var DetectService */
-    private $detectService;
+    const ATTRIBUTE_CODE_TEXTS_LINES = 'rekognition_texts_lines';
 
     /**
-     * @param string $catalogStorageDir
-     * @param PropertySetter $propertySetter
-     * @param string $awsAccessKeyId
-     * @param string $awsSecretAccessKey
-     * @param int $minimumConfidence
+     * Rekognition attributes codes
+     *
+     * @var array
+     */
+    protected $rekognitionAttributesCodes = [
+        self::ATTRIBUTE_CODE_LABELS,
+        self::ATTRIBUTE_CODE_TEXTS_WORDS,
+        self::ATTRIBUTE_CODE_TEXTS_LINES,
+    ];
+
+    /**
+     * Loaded rekognition attributes
+     *
+     * @var array
+     */
+    protected $rekognitionAttributes = [];
+
+    /** @var string */
+    protected $catalogStorageDir;
+
+    /** @var PropertySetter */
+    protected $propertySetter;
+
+    /** @var AttributeRepository */
+    protected $attributeRepository;
+
+    /** @var string */
+    protected $awsAccessKeyId;
+
+    /** @var string */
+    protected $awsSecretAccessKey;
+
+    /** @var int */
+    protected $minimumConfidence;
+
+    /** @var DetectService */
+    protected $detectService;
+
+    /**
+     * @param string              $catalogStorageDir
+     * @param PropertySetter      $propertySetter
+     * @param AttributeRepository $attributeRepository
+     * @param string              $awsAccessKeyId
+     * @param string              $awsSecretAccessKey
+     * @param int                 $minimumConfidence
      */
     public function __construct(
         string $catalogStorageDir,
         PropertySetter $propertySetter,
+        AttributeRepository $attributeRepository,
         string $awsAccessKeyId,
         string $awsSecretAccessKey,
         int $minimumConfidence
-    ) {
-        $this->catalogStorageDir = $catalogStorageDir;
-        $this->propertySetter = $propertySetter;
-        $this->awsAccessKeyId = $awsAccessKeyId;
-        $this->awsSecretAccessKey = $awsSecretAccessKey;
-        $this->minimumConfidence = $minimumConfidence;
+    )
+    {
+        $this->catalogStorageDir   = $catalogStorageDir;
+        $this->propertySetter      = $propertySetter;
+        $this->attributeRepository = $attributeRepository;
+        $this->awsAccessKeyId      = $awsAccessKeyId;
+        $this->awsSecretAccessKey  = $awsSecretAccessKey;
+        $this->minimumConfidence   = $minimumConfidence;
 
         // TODO avoid using "new" here
         $this->detectService = new DetectService(
             [
                 'credentials' => [
-                    'key' => $this->awsAccessKeyId,
+                    'key'    => $this->awsAccessKeyId,
                     'secret' => $this->awsSecretAccessKey,
-                ]
+                ],
             ]
         );
+
+        $this->rekognitionAttributes = $this->getRekognitionAttributes();
     }
 
     /**
-     * @param ProductModel $productModel
-     * @return ProductModel
+     * @param Product | ProductModel $product
+     *
+     * @return Product | ProductModel
      */
-    public function process($productModel)
+    public function process($product)
     {
-        // Needed for mass edit from web interface.
-        // Prevent process of product model without parent as it is not a "1st variant Color"
-        // See https://help.akeneo.com/articles/what-about-products-variants.html
-        if (!$productModel->getParent() instanceof ProductModelInterface) {
-            return $productModel;
+        // Check if product has editable rekognition attributes
+        if (!$this->hasEditableRekognitionAttributes($product)) {
+            return $product;
         }
 
-        if (!$productModel->getImage()) {
-            return $productModel;
+        // Check image attribute
+        $filePath = $this->getImageFilePath($product);
+        if ($filePath === null || !file_exists($filePath)) {
+            return $product;
         }
 
-        $filename = $this->getImageFilename($productModel);
-
-        if (!file_exists($filename)) {
-            return $productModel;
-        }
-
-        $filePointerImage = fopen($filename, 'r');
-        $image = fread($filePointerImage, filesize($filename));
+        // Get data from AWS Rekognition
+        $filePointerImage = fopen($filePath, 'r');
+        $image            = fread($filePointerImage, filesize($filePath));
         fclose($filePointerImage);
-
         $rekognitionImage = $this->detectService->detect($image);
+        $labels           = $rekognitionImage->getLabels($this->minimumConfidence);
 
-        $labels = $rekognitionImage->getLabels($this->minimumConfidence);
-
+        // And set data in attributes
         $this->propertySetter->setData(
-            $productModel,
-            'rekognition_labels',
+            $product,
+            self::ATTRIBUTE_CODE_LABELS,
             implode("\n", $this->getLabelsToStore($labels)),
             ['locale' => null, 'scope' => null]
         );
 
         $texts = $rekognitionImage->getTexts($this->minimumConfidence);
-
         $this->propertySetter->setData(
-            $productModel,
-            'rekognition_texts_words',
+            $product,
+            self::ATTRIBUTE_CODE_TEXTS_WORDS,
             implode("\n", $this->getTextsToStore($texts, Text::TYPE_WORD)),
             ['locale' => null, 'scope' => null]
         );
 
         $this->propertySetter->setData(
-            $productModel,
-            'rekognition_texts_lines',
+            $product,
+            self::ATTRIBUTE_CODE_TEXTS_LINES,
             implode("\n", $this->getTextsToStore($texts, Text::TYPE_LINE)),
             ['locale' => null, 'scope' => null]
         );
 
-        return $productModel;
+        return $product;
     }
 
     /**
-     * @param ProductModel $productModel
-     * @return string
+     * @param Product | ProductModel $productModel
+     *
+     * @return string | null
      */
-    protected function getImageFilename(ProductModel $productModel): string
+    protected function getImageFilePath($product)
     {
-        $filename = implode(
+        $imageAttribute = $product->getImage();
+        if ($imageAttribute === null) {
+            return null;
+        }
+
+        return implode(
             DIRECTORY_SEPARATOR,
             [
                 $this->catalogStorageDir,
-                $productModel->getImage(),
+                $imageAttribute,
             ]
         );
-
-        return $filename;
     }
 
     /**
      * @param Label[] $labels
+     *
      * @return array
      */
     protected function getLabelsToStore(array $labels): array
@@ -157,6 +195,7 @@ class AddRekognitionDataProcessor extends AbstractProcessor
     /**
      * @param Text[] $texts
      * @param string $type
+     *
      * @return array
      */
     protected function getTextsToStore(array $texts, string $type): array
@@ -171,5 +210,108 @@ class AddRekognitionDataProcessor extends AbstractProcessor
         return array_map(function (Text $text): string {
             return $text->getDetectedText();
         }, $textsToStore);
+    }
+
+    /**
+     * Get rekognition attributes
+     *
+     * @return AttributeInterface[]
+     */
+    protected function getRekognitionAttributes(): array
+    {
+        $attributes = [];
+        foreach ($this->rekognitionAttributesCodes as $rekognitionAttributeCode) {
+            $attribute = $this->attributeRepository->findOneByIdentifier($rekognitionAttributeCode);
+            if ($attribute !== null) {
+                $attributes[] = $attribute;
+            }
+        }
+
+        return $attributes;
+    }
+
+    /**
+     * @param Product | ProductModel $product
+     *
+     * @return bool
+     */
+    protected function hasEditableRekognitionAttributes($product): bool
+    {
+        foreach ($this->rekognitionAttributes as $rekognitionAttribute) {
+            if (!$this->isAttributeEditable($product, $rekognitionAttribute)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * @param EntityWithFamilyInterface $entity
+     * @param AttributeInterface        $attribute
+     *
+     * @return bool
+     */
+    protected function isAttributeEditable(EntityWithFamilyInterface $entity, AttributeInterface $attribute): bool
+    {
+        $family = $entity->getFamily();
+        if (null === $family) {
+            return true;
+        }
+
+        if (!$family->hasAttribute($attribute)) {
+            return false;
+        }
+
+        if ($this->isNonVariantProduct($entity)) {
+            return true;
+        }
+
+        $familyVariant = $entity->getFamilyVariant();
+        if (null === $familyVariant) {
+            return true;
+        }
+
+        $level = $entity->getVariationLevel();
+        if (0 === $level) {
+            foreach ($familyVariant->getCommonAttributes() as $familyVariantAttribute) {
+                if ($familyVariantAttribute->getCode() === $attribute->getCode()) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        $attributeSet = $familyVariant->getVariantAttributeSet($level);
+        if (null === $attributeSet) {
+            throw new \Exception(
+                sprintf(
+                    'The variant attribute set of level "%d" was expected for the family variant "%s".',
+                    $level,
+                    $familyVariant->getCode()
+                )
+            );
+        }
+
+        return $attributeSet->hasAttribute($attribute);
+    }
+
+    /**
+     * @param EntityWithFamilyInterface $entity
+     *
+     * @return bool
+     */
+    protected function isNonVariantProduct(EntityWithFamilyInterface $entity): bool
+    {
+        if ($entity instanceof ProductModelInterface) {
+            return false;
+        }
+
+        if ($entity instanceof ProductInterface) {
+            return !$entity->isVariant();
+        }
+
+        return false;
     }
 }
