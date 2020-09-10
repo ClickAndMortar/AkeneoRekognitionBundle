@@ -7,13 +7,13 @@ namespace ClickAndMortar\AkeneoRekognitionBundle\Connector\Processor\MassEdit\Pr
 use ClickAndMortar\Rekognition\Label;
 use ClickAndMortar\Rekognition\Service\DetectService;
 use ClickAndMortar\Rekognition\Text;
-use Pim\Bundle\CatalogBundle\Doctrine\ORM\Repository\AttributeRepository;
-use Pim\Bundle\EnrichBundle\Connector\Processor\AbstractProcessor;
-use Pim\Component\Catalog\Model\EntityWithFamilyInterface;
-use Pim\Component\Catalog\Model\AttributeInterface;
-use Pim\Component\Catalog\Model\Product;
-use Pim\Component\Catalog\Model\ProductModel;
-use Pim\Component\Catalog\Updater\PropertySetter;
+use Akeneo\Pim\Structure\Bundle\Doctrine\ORM\Repository\AttributeRepository;
+use Akeneo\Pim\Enrichment\Component\Product\Connector\Processor\MassEdit\AbstractProcessor;
+use Akeneo\Pim\Enrichment\Component\Product\Model\EntityWithFamilyInterface;
+use Akeneo\Pim\Structure\Component\Model\AttributeInterface;
+use Akeneo\Pim\Enrichment\Component\Product\Model\Product;
+use Akeneo\Pim\Enrichment\Component\Product\Model\ProductModel;
+use Akeneo\Pim\Enrichment\Component\Product\Updater\PropertySetter;
 
 /**
  * Class AddRekognitionDataProcessor

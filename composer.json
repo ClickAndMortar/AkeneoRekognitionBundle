@@ -4,8 +4,7 @@
     "type": "symfony-bundle",
     "license": "MIT",
     "require": {
-        "php": "^7.1",
-        "akeneo/pim-community-dev": "2.3.*",
+        "akeneo/pim-community-dev": "3.2.*",
         "clickandmortar/rekognition-php": "^0.2"
     },
     "autoload": {
