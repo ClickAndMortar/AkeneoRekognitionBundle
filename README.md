@@ -15,8 +15,7 @@ from a product model image and to store them into this product model.
 
 |                                     | Version |
 | ----------------------------------- | ------- |
-| PHP                                 | `>=7.1` |
-| [Akeneo](https://www.akeneo.com/)   | `>=2.3` |
+| [Akeneo](https://www.akeneo.com/)   | `>=3.2` |
 
 An AWS account is also required as
 [AWS Rekognition](https://aws.amazon.com/rekognition/)
@@ -62,6 +61,17 @@ class AppKernel extends Kernel
 
 Before using `Akeneo Rekognition Bundle`,
 [set credentials to make requests to Amazon Web Services](https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/guide_credentials.html).
+
+In `parameters.yml`:
+
+```
+parameters:
+    ...
+    aws_access_key_id: <your_access_key_id>
+    aws_secret_access_key: <your_secret_access_key>
+    aws_rekognition_minimum_confidence: 75
+    ...
+```
 
 ### Import attributes
 

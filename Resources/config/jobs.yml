@@ -1,5 +1,7 @@
 parameters:
   clickandmortar.connector.job_name.add_rekognition_data: 'add_rekognition_data'
+  pim_enrich.connector.job.job_parameters.default_values_provider.product_mass_edit.class: 'Akeneo\Pim\Enrichment\Component\Product\Connector\Job\JobParameters\DefaultValueProvider\ProductMassEdit'
+  pim_enrich.connector.job.job_parameters.constraint_collection_provider.product_mass_edit.class: 'Akeneo\Pim\Enrichment\Component\Product\Connector\Job\JobParameters\ConstraintCollectionProvider\ProductMassEdit'
 
 services:
   clickandmortar.job.add_rekognition_data:
