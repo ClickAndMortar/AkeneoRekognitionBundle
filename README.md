@@ -11,6 +11,14 @@ from a product model image and to store them into this product model.
 
 ![Akeneo Rekognition Bundle in 3 steps](img/akeneo-rekognition-bundle-in-3-steps.png)
 
+## Versions
+
+| **Bundle version**  | **Akeneo version** |
+| ------------- | ------------- |
+| v0.3.*  | v4.0.*  |
+| v0.2.*  | v3.2.*  |
+
+
 ## Requirements
 
 |                                     | Version |
