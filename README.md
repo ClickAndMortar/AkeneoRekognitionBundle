@@ -18,13 +18,6 @@ from a product model image and to store them into this product model.
 | v0.3.*  | v4.0.*  |
 | v0.2.*  | v3.2.*  |
 
-
-## Requirements
-
-|                                     | Version |
-| ----------------------------------- | ------- |
-| [Akeneo](https://www.akeneo.com/)   | `>=3.2` |
-
 An AWS account is also required as
 [AWS Rekognition](https://aws.amazon.com/rekognition/)
 will be used.
@@ -40,27 +33,16 @@ $ composer require clickandmortar/akeneo-rekognition-bundle
 ### Enable the Bundle
 
 Enable the bundle by adding it to the list of registered bundles
-in the `app/AppKernel.php` file of your project:
+in the `config/bundles.php` file of your project:
 
 ```php
 <?php
-// app/AppKernel.php
 
-// ...
-class AppKernel extends Kernel
-{
-    public function registerBundles()
-    {
-        $bundles = [
-            // ...
-            new ClickAndMortar\AkeneoRekognitionBundle\ClickAndMortarAkeneoRekognitionBundle(),
-        ];
-
-        // ...
-    }
-
-    // ...
-}
+return [
+    ...
+    ClickAndMortar\AkeneoRekognitionBundle\ClickAndMortarAkeneoRekognitionBundle::class => ['all' => true]
+    ...
+];
 ```
 
 ## Configuration
@@ -70,7 +52,7 @@ class AppKernel extends Kernel
 Before using `Akeneo Rekognition Bundle`,
 [set credentials to make requests to Amazon Web Services](https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/guide_credentials.html).
 
-In `parameters.yml`:
+In `config/services/services.yml`:
 
 ```
 parameters:
